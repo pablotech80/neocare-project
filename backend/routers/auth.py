@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.core.config import SessionLocal
-from app.models.user import User
-from app.models.board import Board   # 👈 Importamos Board para crear el tablero por defecto
+from backend.core.config import SessionLocal
+from backend.models.user import User
+from backend.models.board import Board
 from passlib.context import CryptContext
 from jose import jwt, JWTError
 import datetime

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.core.config import SessionLocal
-from app.models.board import Board
-from app.models.user import User
-from app.routers.auth import get_current_user
+from backend.core.config import SessionLocal
+from backend.models.board import Board
+from backend.models.user import User
+from backend.routers.auth import get_current_user
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/boards", tags=["boards"])

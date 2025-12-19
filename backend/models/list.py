@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from app.core.config import Base
+from backend.core.config import Base
 
 class List(Base):
     __tablename__ = "lists"

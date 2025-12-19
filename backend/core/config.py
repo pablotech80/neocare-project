@@ -6,6 +6,10 @@ from dotenv import load_dotenv
 # Cargar variables desde el archivo .env
 load_dotenv()
 
+load_dotenv()
+print("DATABASE_URL:", os.getenv("DATABASE_URL"))
+
+
 # Leer la URL completa de la base de datos
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
