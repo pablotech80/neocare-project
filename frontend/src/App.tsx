@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import BoardView from './pages/BoardView';
+import MyHours from './pages/MyHours';
 
 function App() {
   return (
@@ -26,6 +27,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <BoardView />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-hours"
+            element={
+              <ProtectedRoute>
+                <MyHours />
               </ProtectedRoute>
             }
           />

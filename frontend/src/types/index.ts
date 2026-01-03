@@ -31,3 +31,11 @@ export interface RegisterResponse {
   id: number;
   default_board_id: number;
 }
+
+// Re-export worklog types
+export type {
+  Worklog,
+  CreateWorklogRequest,
+  UpdateWorklogRequest,
+  WeeklyWorklogsResponse,
+} from './worklog';

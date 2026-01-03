@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Loader2, Calendar, AlertCircle } from 'lucide-react';
 import type { Card, CreateCardRequest, UpdateCardRequest } from '../api/cards';
+import WorklogSection from './WorklogSection';
 
 interface CardModalProps {
   isOpen: boolean;
@@ -99,7 +100,7 @@ const CardModal = ({ isOpen, onClose, onSave, card, listId, boardId }: CardModal
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between p-4 border-b">
           <h3 className="text-lg font-semibold text-gray-900">
             {isEditing ? 'Editar Tarjeta' : 'Nueva Tarjeta'}
@@ -119,7 +120,8 @@ const CardModal = ({ isOpen, onClose, onSave, card, listId, boardId }: CardModal
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+        <div className="overflow-y-auto flex-1">
+          <form onSubmit={handleSubmit} className="p-4 space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Título <span className="text-red-500">*</span>
@@ -194,6 +196,11 @@ const CardModal = ({ isOpen, onClose, onSave, card, listId, boardId }: CardModal
             </div>
           )}
 
+          {/* Sección de horas trabajadas - solo en edición */}
+          {isEditing && card && (
+            <WorklogSection cardId={card.id} />
+          )}
+
           <div className="flex gap-3 justify-end pt-4 border-t">
             <button
               type="button"
@@ -220,6 +227,7 @@ const CardModal = ({ isOpen, onClose, onSave, card, listId, boardId }: CardModal
             </button>
           </div>
         </form>
+        </div>
       </div>
     </div>
   );

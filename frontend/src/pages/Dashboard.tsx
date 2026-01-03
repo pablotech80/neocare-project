@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getBoards, createBoard } from '../api/boards';
-import { LayoutDashboard, Plus, LogOut, Loader2, FolderKanban } from 'lucide-react';
+import { LayoutDashboard, Plus, LogOut, Loader2, FolderKanban, Clock } from 'lucide-react';
 
 interface Board {
   id: number;
@@ -63,11 +63,18 @@ const Dashboard = () => {
           <div className="flex items-center gap-4">
             <span className="text-gray-600">Hola, {user?.username || user?.email}</span>
             <button
+              onClick={() => navigate('/my-hours')}
+              className="flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition"
+            >
+              <Clock className="w-5 h-5" />
+              <span className="hidden sm:inline">Mis Horas</span>
+            </button>
+            <button
               onClick={logout}
               className="flex items-center gap-2 text-gray-500 hover:text-red-600 transition"
             >
               <LogOut className="w-5 h-5" />
-              Salir
+              <span className="hidden sm:inline">Salir</span>
             </button>
           </div>
         </div>

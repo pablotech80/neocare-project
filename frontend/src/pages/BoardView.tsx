@@ -7,9 +7,9 @@ import { getCards, createCard, updateCard, deleteCard } from '../api/cards';
 import type { Card, CreateCardRequest, UpdateCardRequest } from '../api/cards';
 import CardItem from '../components/CardItem';
 import CardModal from '../components/CardModal';
-import { 
-  ArrowLeft, Plus, Loader2, LayoutDashboard, LogOut, 
-  Trash2, AlertCircle 
+import {
+  ArrowLeft, Plus, Loader2, LayoutDashboard, LogOut,
+  Trash2, AlertCircle, Clock
 } from 'lucide-react';
 
 const BoardView = () => {
@@ -137,6 +137,13 @@ const BoardView = () => {
           </div>
           <div className="flex items-center gap-4">
             <span className="text-gray-600 text-sm">Hola, {user?.username || user?.email}</span>
+            <button
+              onClick={() => navigate('/my-hours')}
+              className="flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition text-sm"
+            >
+              <Clock className="w-5 h-5" />
+              <span className="hidden sm:inline">Mis Horas</span>
+            </button>
             <button
               onClick={logout}
               className="flex items-center gap-2 text-gray-500 hover:text-red-600 transition"
