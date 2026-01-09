@@ -1,1 +1,70 @@
 @import "tailwindcss";
+
+/* ================================
+   Animación suave para columnas y tarjetas
+   (fade + slide suave)
+================================ */
+@keyframes fade-slide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-slide {
+  animation: fade-slide 0.35s ease-out forwards;
+}
+
+/* ================================
+   Fade del fondo del modal
+================================ */
+@keyframes modal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-modal-fade {
+  animation: modal-fade 0.25s ease-out forwards;
+}
+
+/* ================================
+   Escala suave del modal
+================================ */
+@keyframes modal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-modal-scale {
+  animation: modal-scale 0.25s ease-out forwards;
+}
+
+/* ================================
+   Animación de elevación para DnD
+================================ */
+@keyframes card-lift {
+  from { transform: scale(1); }
+  to { transform: scale(1.03); }
+}
+
+.card-lift {
+  animation: card-lift 0.15s ease-out forwards;
+}
+
+/* ================================
+   Transiciones suaves para DnD
+================================ */
+.dnd-transition {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
