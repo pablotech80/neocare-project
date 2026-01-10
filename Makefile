@@ -1,26 +1,33 @@
-.PHONY: help install setup-db run run-dev clean env-setup
+.PHONY: help install install-frontend setup-db run run-dev run-frontend build-frontend clean env-setup
 
 PYTHON := python3
 VENV := venv
 VENV_BIN := $(VENV)/bin
 BACKEND_DIR := backend
+FRONTEND_DIR := frontend
 
 help:
-	@echo "NeoCare Backend - Comandos disponibles:"
+	@echo "NeoCare - Comandos disponibles:"
 	@echo ""
-	@echo "  make install    - Instalar dependencias Python"
-	@echo "  make setup-db   - Crear base de datos"
-	@echo "  make env-setup  - Crear archivo .env"
-	@echo "  make run-dev    - Iniciar servidor (desarrollo)"
-	@echo "  make run        - Iniciar servidor (producción)"
-	@echo "  make clean      - Limpiar archivos temporales"
+	@echo "Backend:"
+	@echo "  make install         - Instalar dependencias Python"
+	@echo "  make setup-db        - Crear base de datos"
+	@echo "  make env-setup       - Crear archivo .env"
+	@echo "  make run-dev         - Iniciar backend (desarrollo)"
+	@echo "  make run             - Iniciar backend (producción)"
+	@echo ""
+	@echo "Frontend:"
+	@echo "  make install-frontend - Instalar dependencias Node"
+	@echo "  make run-frontend     - Iniciar frontend (desarrollo)"
+	@echo "  make build-frontend   - Build de producción"
+	@echo ""
+	@echo "General:"
+	@echo "  make clean           - Limpiar archivos temporales"
 	@echo ""
 	@echo "Setup rápido:"
-	@echo "  1. make install"
-	@echo "  2. make env-setup (editar .env con credenciales)"
-	@echo "  3. make setup-db"
-	@echo "  4. source venv/bin/activate"
-	@echo "  5. make run-dev"
+	@echo "  Backend: make install && make env-setup && make setup-db"
+	@echo "  Frontend: make install-frontend"
+	@echo "  Iniciar: make run-dev (backend) + make run-frontend (frontend)"
 
 install:
 	@echo "Creando entorno virtual..."
@@ -54,6 +61,21 @@ run:
 run-dev:
 	@echo "Iniciando servidor en modo desarrollo..."
 	$(VENV_BIN)/uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+
+install-frontend:
+	@echo "Instalando dependencias del frontend..."
+	@cd $(FRONTEND_DIR) && npm install
+	@echo ""
+	@echo "Instalación del frontend completada!"
+
+run-frontend:
+	@echo "Iniciando frontend en modo desarrollo..."
+	@cd $(FRONTEND_DIR) && npm run dev
+
+build-frontend:
+	@echo "Construyendo frontend para producción..."
+	@cd $(FRONTEND_DIR) && npm run build
+	@echo "Build completado en $(FRONTEND_DIR)/dist"
 
 clean:
 	@echo "Limpiando archivos temporales..."
