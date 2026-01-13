@@ -21,7 +21,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60")
 REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
 
 # Security Configuration
-BCRYPT_ROUNDS = int(os.getenv("BCRYPT_ROUNDS", "12"))
+BCRYPT_ROUNDS = int(os.getenv("BCRYPT_ROUNDS", "10"))
 
 # CORS Configuration
 CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
