@@ -7,7 +7,7 @@ import type {
 } from '../types/worklog';
 
 // TODO: Cambiar USE_MOCK a false cuando el backend esté listo
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 // Mock data para desarrollo
 let mockWorklogs: Worklog[] = [
