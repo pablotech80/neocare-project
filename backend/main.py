@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routers import auth, boards, cards, lists, health, worklogs, reports
+from backend.routers import auth, boards, cards, lists, health, worklogs, reports, init_demo
 from backend.core.config import Base, engine, CORS_ORIGINS
 from backend.models import user, board, list, card, worklog
 from backend.core.logging_config import setup_logging
@@ -52,6 +52,7 @@ Base.metadata.create_all(bind=engine)
 
 # Registrar los routers
 app.include_router(health.router)
+app.include_router(init_demo.router)
 app.include_router(auth.router)
 app.include_router(boards.router)
 app.include_router(lists.router)
