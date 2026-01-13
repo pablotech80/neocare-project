@@ -1,35 +1,174 @@
-# Archivos temporales de Python
+# ===================================
+# Python
+# ===================================
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 *.pyc
 *.pyo
 *.pyd
 
-# Configuración local de VS Code / PyCharm
-.vscode/
-.idea/
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
 
-# Variables de entorno (credenciales)
-.env
-.env.*
-
-# Archivos de base de datos locales
-*.db
-
-# Llaves y certificados
-*.pem
-*.key
-*.crt
-
-# Archivos de logs
-*.log
-
-# Archivos de compilación
+# Packaging
+*.egg
 *.egg-info/
 dist/
 build/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.manifest
+*.spec
 
-# Configuración de Docker (si usas credenciales en docker-compose)
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# ===================================
+# IDEs y Editores
+# ===================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# ===================================
+# Variables de Entorno y Credenciales
+# ===================================
+.env
+.env.*
+!env.example
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+
+# ===================================
+# Base de Datos
+# ===================================
+*.db
+*.sqlite
+*.sqlite3
+neocare.db
+
+# ===================================
+# Logs
+# ===================================
+*.log
+logs/
+log/
+*.log.*
+
+# ===================================
+# Node.js / Frontend
+# ===================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.eslintcache
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# ===================================
+# Docker
+# ===================================
 docker-compose.override.yml
+.dockerignore
 
-# Documentación de Claude Code
+# ===================================
+# Backups y Temporales
+# ===================================
+*.bak
+*.tmp
+*.temp
+*.swp
+.DS_Store
+Thumbs.db
+*.cache
+
+# ===================================
+# Alembic
+# ===================================
+# No ignorar carpeta alembic, solo algunos archivos temporales
+alembic/__pycache__/
+alembic/versions/__pycache__/
+
+# ===================================
+# Otros
+# ===================================
 CLAUDE.md
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+*.pid
+*.seed
+*.pid.lock
+
+# ===================================
+# Archivos de Sistema macOS
+# ===================================
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# ===================================
+# Archivos de Sistema Windows
+# ===================================
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk

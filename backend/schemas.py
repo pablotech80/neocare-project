@@ -16,7 +16,7 @@ class UserResponse(BaseModel):
     email: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # --- Tableros ---
 class BoardCreate(BaseModel):
@@ -27,4 +27,4 @@ class BoardResponse(BaseModel):
     title: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True

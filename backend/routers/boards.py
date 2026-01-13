@@ -21,7 +21,7 @@ class BoardOut(BaseModel):
     user_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # --- Endpoints ---
 @router.post("/", response_model=BoardOut)

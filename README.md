@@ -1,379 +1,631 @@
-# NeoCare - Monorepo
+<div align="center">
 
-Aplicación de gestión de tareas tipo Kanban.
+# 🏥 NeoCare - Sistema de Gestión Kanban
 
-##  Estructura
+**Aplicación profesional de gestión de tareas y proyectos para equipos de salud**
+
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-009688.svg?style=flat&logo=FastAPI)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-19.2.0-61DAFB.svg?style=flat&logo=react)](https://reactjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6.svg?style=flat&logo=typescript)](https://www.typescriptlang.org)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-316192.svg?style=flat&logo=postgresql)](https://www.postgresql.org)
+[![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
+
+[Características](#-características) •
+[Requisitos](#-requisitos) •
+[Instalación](#-instalación-rápida) •
+[Documentación](#-documentación) •
+[API](#-api-rest) •
+[Despliegue](#-despliegue)
+
+</div>
+
+---
+
+## 📋 Descripción
+
+**NeoCare** es una plataforma completa de gestión de proyectos tipo Kanban desarrollada específicamente para el departamento de Innovación de NeoCare Health. El sistema permite a los equipos organizar tareas, registrar horas de trabajo y generar reportes de productividad de manera eficiente y segura.
+
+### 🎯 Propósito del Proyecto
+
+Facilitar la gestión ágil de proyectos mediante:
+- **Tableros Kanban** personalizables por usuario
+- **Registro de horas** (worklogs) con seguimiento detallado
+- **Reportes semanales** automáticos con métricas de productividad
+- **Autenticación segura** con JWT
+- **Control de acceso** basado en ownership de recursos
+
+---
+
+## ✨ Características
+
+### 🔐 Autenticación y Seguridad
+- ✅ Registro y login de usuarios
+- ✅ Autenticación JWT con tokens de acceso y refresh
+- ✅ Hashing seguro de contraseñas con bcrypt (12 rounds)
+- ✅ Control de acceso basado en ownership
+- ✅ Protección contra IDOR (Insecure Direct Object Reference)
+- ✅ CORS configurado y rate limiting
+
+### 📊 Gestión de Tableros
+- ✅ Creación y gestión de tableros (boards)
+- ✅ Organización en listas/columnas
+- ✅ Tarjetas (cards) con título, descripción y fecha límite
+- ✅ Estados de tarjetas (todo, in_progress, done)
+- ✅ Drag & drop para mover tarjetas
+
+### ⏱️ Registro de Horas (Worklogs)
+- ✅ Registro de horas trabajadas por tarjeta
+- ✅ Validaciones de fecha y horas
+- ✅ Notas descriptivas (hasta 200 caracteres)
+- ✅ Consulta de horas semanales por usuario
+- ✅ Auditoría con timestamps de creación y actualización
+
+### 📈 Sistema de Reportes
+- ✅ Resumen semanal de tarjetas (completadas, vencidas, nuevas)
+- ✅ Horas trabajadas por usuario
+- ✅ Horas trabajadas por tarjeta
+- ✅ Filtrado por semana (formato ISO 8601)
+- ✅ Consultas SQL optimizadas con agregaciones
+
+### 🔍 Monitoring y Logging
+- ✅ Health checks de API y base de datos
+- ✅ Logging estructurado de eventos
+- ✅ Auditoría de autenticación
+- ✅ Métricas de tiempo de procesamiento
+
+---
+
+## 🏗️ Arquitectura
 
 ```
 NeoCare-MVBackend/
-├── backend/         # API FastAPI + PostgreSQL
-├── frontend/        # React + Vite + TypeScript
-└── README.md
+├── backend/                    # API FastAPI
+│   ├── core/                  # Configuración y utilidades
+│   │   ├── config.py         # Variables de entorno
+│   │   ├── security.py       # JWT y hashing
+│   │   └── logging_config.py # Setup de logging
+│   ├── models/               # Modelos SQLAlchemy
+│   │   ├── user.py
+│   │   ├── board.py
+│   │   ├── list.py
+│   │   ├── card.py
+│   │   └── worklog.py
+│   ├── routers/              # Endpoints de la API
+│   │   ├── auth.py          # Autenticación
+│   │   ├── boards.py        # CRUD tableros
+│   │   ├── lists.py         # CRUD listas
+│   │   ├── cards.py         # CRUD tarjetas
+│   │   ├── worklogs.py      # Registro de horas
+│   │   ├── reports.py       # Reportes semanales
+│   │   └── health.py        # Health checks
+│   ├── schemas/              # Schemas Pydantic
+│   ├── alembic/              # Migraciones de BD
+│   ├── main.py               # Aplicación principal
+│   └── database.py           # Configuración DB
+├── frontend/                  # Aplicación React
+│   ├── src/
+│   │   ├── api/              # Cliente HTTP
+│   │   ├── components/       # Componentes React
+│   │   ├── pages/            # Páginas/Vistas
+│   │   ├── context/          # Context API
+│   │   └── types/            # TypeScript types
+│   ├── public/
+│   └── package.json
+├── logs/                      # Logs de aplicación
+├── .env                       # Variables de entorno (no versionado)
+├── env.example               # Plantilla de variables
+├── requirements.txt          # Dependencias Python
+├── Makefile                  # Comandos útiles
+└── README.md                 # Este archivo
 ```
 
-##  Cómo ejecutar
+---
+
+## 💻 Stack Tecnológico
 
 ### Backend
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-URL: http://127.0.0.1:8000
-Docs: http://127.0.0.1:8000/docs
+- **Framework:** FastAPI 0.104.1
+- **ORM:** SQLAlchemy 2.0.23
+- **Base de datos:** PostgreSQL 12+
+- **Autenticación:** python-jose (JWT) + passlib (bcrypt)
+- **Validación:** Pydantic 2.5.0
+- **Migraciones:** Alembic 1.13.0
+- **Servidor:** Uvicorn 0.24.0
 
 ### Frontend
+- **Framework:** React 19.2.0
+- **Build tool:** Vite 7.2.4
+- **Lenguaje:** TypeScript 5.9.3
+- **Estilos:** TailwindCSS 4.1.18
+- **Routing:** React Router DOM 7.10.1
+- **HTTP Client:** Axios 1.13.2
+- **Iconos:** Lucide React 0.561.0
+- **Drag & Drop:** @dnd-kit 6.3.1
+
+---
+
+## 🚀 Instalación Rápida
+
+### Requisitos Previos
+
+- **Python:** 3.9 o superior
+- **Node.js:** 18 o superior
+- **PostgreSQL:** 12 o superior
+- **Git:** Para clonar el repositorio
+
+### 1️⃣ Clonar el Repositorio
+
 ```bash
+git clone https://github.com/melinavm22-cloud/NeoCare-MVBackend.git
+cd NeoCare-MVBackend
+```
+
+### 2️⃣ Configurar Backend
+
+```bash
+# Crear entorno virtual
+python3 -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Configurar variables de entorno
+cp env.example .env
+# Editar .env con tus credenciales
+
+# Crear base de datos
+createdb neocare
+
+# Ejecutar migraciones
+cd backend
+alembic upgrade head
+cd ..
+
+# Iniciar servidor
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Backend disponible en:** http://localhost:8000  
+**Documentación API:** http://localhost:8000/docs
+
+### 3️⃣ Configurar Frontend
+
+```bash
+# En otra terminal
 cd frontend
+
+# Instalar dependencias
 npm install
+
+# Iniciar servidor de desarrollo
 npm run dev
 ```
-URL: http://localhost:5173
 
-**Credenciales de prueba (modo mock):**
-- Email: `admin@neocare.com`
-- Password: `admin123`
+**Frontend disponible en:** http://localhost:5173
 
-##  Documentación
+### ⚡ Usar Makefile (Alternativa)
 
-- **Frontend:** Ver `frontend/FRONTEND_STATUS.md`
-- **Backend:** Ver notas en `backend/README.md`
+El proyecto incluye un Makefile con comandos útiles:
 
-## Tecnologías
+```bash
+# Ver todos los comandos disponibles
+make help
 
-- **Backend:** Python + FastAPI + PostgreSQL
-- **Frontend:** React + Vite + TypeScript + TailwindCSS
+# Setup completo backend
+make install && make env-setup && make setup-db
 
-# NeoCare - Monorepo
+# Setup frontend
+make install-frontend
 
-Aplicación de gestión de tareas tipo Kanban desarrollada para el departamento de Innovación de NeoCare Health.  
-El sistema permite autenticación de usuarios, gestión de tableros y manejo de tarjetas (cards) como unidades mínimas de trabajo.
+# Iniciar servicios
+make run-dev        # Backend en modo desarrollo
+make run-frontend   # Frontend en modo desarrollo
 
-El proyecto utiliza una arquitectura tipo monorepo con backend en FastAPI y frontend en React.
-
----
-
-## Backend (FastAPI)
-
-### Tecnologías
-- FastAPI
-- SQLAlchemy
-- PostgreSQL
-- JWT Authentication
-
-### Modelos principales
-- User
-- Board
-- List
-- Card
-
----
-
-## Modelo Card
-
-Una tarjeta representa una tarea dentro del tablero Kanban.
-
-### Campos
-
-| Campo | Tipo | Descripción |
-|-----|-----|------------|
-| id | integer | Identificador único |
-| board_id | integer | Tablero al que pertenece |
-| list_id | integer | Columna actual |
-| title | varchar(80) | Título de la tarjeta |
-| description | text | Descripción opcional |
-| due_date | date | Fecha límite |
-| user_id | integer | Usuario creador |
-| created_at | timestamp | Fecha de creación |
-| updated_at | timestamp | Última actualización |
-
----
-
-## Endpoints - Cards
-
-### Crear tarjeta
-## POST/CARDS
-
-
-**Body**
-```json
-{
-  "title": "Implementar login",
-  "list_id": 1
-}
-
-#Listar Tarjetas
-
-#GET /cards
-
-#Ver tarjetas por ID
-##GET /cards/{id}
-
-Actualizar tarjeta
-##PUT /cards/{id}
-
-##Eliminar tarjeta
-#DELETE /cards/{id}
-
-"""rontend (React)
- Estado actual:
-El frontend se genera mediante un script automatizado (generate_frontend.py).
-
-Este script crea una aplicación React con:
-
-Autenticación (login y register)
-Manejo de JWT
-Rutas protegidas
-Dashboard
-Vista de tableros
-Interfaz Kanban base
-
-Tecnologías
-
-React 18
-React Router DOM
-Axios
-Bootstrap
-"""
-##Configuracion Frontend
-
-REACT_APP_API_URL=http://localhost:8000
-
-##Ejecucion del proyecto
-
-##cd backend
-uvicorn main:app --reload
-
-##Frontend
-
-python generate_frontend.py
-
-##Entrar al Frontend
-
-```
-cd NeoCare-MVFrontend
-npm install
-npm start
+# Limpiar archivos temporales
+make clean
 ```
 
-##Testing
+---
 
-#Pruebas manuales realizadas con Thunder Client / Postman para verificar:
+## 🔧 Configuración
 
-Login
-Creación de tarjetas
-Listado de tarjetas
-Edición de tarjetas
-Manejo de errores de la API
+### Variables de Entorno
 
+Editar el archivo `.env` con las siguientes variables:
 
+```env
+# Database
+DATABASE_URL=postgresql://postgres:password@localhost:5432/neocare
 
-- **Auth:** JWT
-- **Hosting:** Render (backend) + Vercel (frontend)
+# JWT Configuration
+SECRET_KEY=tu-clave-secreta-minimo-32-caracteres-cambiar-en-produccion
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=60
+REFRESH_TOKEN_EXPIRE_DAYS=7
 
+# Security
+BCRYPT_ROUNDS=12
 
-# Semana 4
+# CORS (comma-separated origins)
+CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 
-## Nueva tabla worklogs
+# Environment
+ENVIRONMENT=development
+```
 
-|  Campo     |     Tipo	     |          Descripción         |
-|   id	     |  SERIAL PK	   |  Identificador del worklog   |
-| card_id	   |  INTEGER FK	 |  Tarjeta asociada            |
-| user_id	   |  INTEGER FK	 |  Usuario autor del registro  |
-| date		   |  DATE		     |  Fecha del registro          |
-| hours		   |  FLOAT		     |  Horas dedicadas (> 0)       |
-| note		   |  VARCHAR(200) |  Nota opcional               |
-| created_at |  TIMESTAMP	   |  Fecha de creación           |
-| updated_at |  TIMESTAMP	   |  Fecha de actualización      |
+⚠️ **Importante:** 
+- Cambiar `SECRET_KEY` a un valor aleatorio y seguro en producción
+- Usar `openssl rand -hex 32` para generar una clave segura
+- Nunca compartir el archivo `.env` en el repositorio
 
+---
 
+## 📚 Documentación
 
-## Endpoints creados
+- **[Arquitectura del Sistema](docs/ARCHITECTURE.md)** - Diseño técnico y decisiones de arquitectura
+- **[Documentación de API](docs/API.md)** - Referencia completa de endpoints
+- **[Guía de Despliegue](docs/DEPLOYMENT.md)** - Instrucciones para producción
+- **[Backend README](backend/README_BACKEND.md)** - Documentación detallada del backend
+- **[Frontend Status](frontend/FRONTEND_STATUS.md)** - Estado y características del frontend
 
-### Proceso worlogs para crear
-POST /cards/{card_id}/worklogs
+### 📖 Swagger UI
 
-### Para listar worklogs por tarjeta
-GET /cards/{card_id}/worklogs
+La documentación interactiva de la API está disponible en:
+- **Swagger UI:** http://localhost:8000/docs
+- **ReDoc:** http://localhost:8000/redoc
 
-### Para editar worklog propio
-PATCH /worklogs/{id}
+---
 
-### Para eliminar worklog propio
-DELETE /worklogs/{id}
+## 🌐 API REST
 
-### Para obtener worklogs semanales del usuario autenticado
-GET /users/me/worklogs?week=YYYY-WW
+### Endpoints Principales
 
+#### Autenticación
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| POST | `/auth/register` | Registrar nuevo usuario | ❌ |
+| POST | `/auth/login` | Login y obtener tokens | ❌ |
+| POST | `/auth/refresh` | Renovar access token | ❌ |
+| POST | `/auth/logout` | Logout del usuario | ✅ |
+| GET | `/auth/me` | Obtener usuario actual | ✅ |
 
-## Validaciones de cliente + servidor
+#### Boards (Tableros)
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/boards/` | Listar tableros del usuario | ✅ |
+| POST | `/boards/` | Crear nuevo tablero | ✅ |
+| GET | `/boards/{id}` | Obtener tablero específico | ✅ |
+| PUT | `/boards/{id}` | Actualizar tablero | ✅ |
+| DELETE | `/boards/{id}` | Eliminar tablero | ✅ |
+
+#### Lists (Listas/Columnas)
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/lists/board/{board_id}` | Listar listas de un tablero | ✅ |
+| POST | `/lists/` | Crear nueva lista | ✅ |
+| PUT | `/lists/{id}` | Actualizar lista | ✅ |
+| DELETE | `/lists/{id}` | Eliminar lista | ✅ |
+
+#### Cards (Tarjetas)
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/cards/` | Listar tarjetas del usuario | ✅ |
+| POST | `/cards/` | Crear nueva tarjeta | ✅ |
+| PUT | `/cards/{id}` | Actualizar tarjeta | ✅ |
+| DELETE | `/cards/{id}` | Eliminar tarjeta | ✅ |
+
+#### Worklogs (Registro de Horas)
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| POST | `/cards/{card_id}/worklogs` | Registrar horas en tarjeta | ✅ |
+| GET | `/cards/{card_id}/worklogs` | Listar worklogs de tarjeta | ✅ |
+| PATCH | `/worklogs/{id}` | Actualizar worklog propio | ✅ |
+| DELETE | `/worklogs/{id}` | Eliminar worklog propio | ✅ |
+| GET | `/users/me/worklogs?week=YYYY-WW` | Worklogs semanales del usuario | ✅ |
+
+#### Reports (Reportes)
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/report/{board_id}/summary?week=YYYY-WW` | Resumen semanal de tarjetas | ✅ |
+| GET | `/report/{board_id}/hours-by-user?week=YYYY-WW` | Horas por usuario | ✅ |
+| GET | `/report/{board_id}/hours-by-card?week=YYYY-WW` | Horas por tarjeta | ✅ |
+
+#### Health
+| Método | Endpoint | Descripción | Auth |
+|--------|----------|-------------|------|
+| GET | `/health/` | Health check público | ❌ |
+| GET | `/health/db` | Health check base de datos | ❌ |
+| GET | `/health/metrics` | Métricas del sistema | ✅ |
+
+### Ejemplo de Uso
+
+```bash
+# Registrar usuario
+curl -X POST http://localhost:8000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"john","email":"john@example.com","password":"SecurePass123!"}'
+
+# Login
+curl -X POST http://localhost:8000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"john@example.com","password":"SecurePass123!"}'
+
+# Crear tablero (con token)
+curl -X POST http://localhost:8000/boards/ \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Mi Proyecto"}'
+```
+
+---
+
+## 🧪 Testing
 
 ### Backend
-hours > 0 (mínimo recomendado: 0.25)
-date válida y no futura
-note ≤ 200 caracteres
-Solo el autor puede editar o eliminar su worklog
-JWT obligatorio
-Acceso restringido a tarjetas del equipo
+
+```bash
+# Ejecutar tests unitarios
+pytest
+
+# Con cobertura
+pytest --cov=backend --cov-report=html
+
+# Ver reporte
+open htmlcov/index.html
+```
 
 ### Frontend
-Validar horas > 0
-Validar fecha válida
-Validar longitud de nota
-Mostrar errores del servidor
-Refrescar la tarjeta tras crear/editar/eliminar
 
+```bash
+cd frontend
 
-## Ejemplos de payload
+# Ejecutar tests
+npm test
 
-### Para Crear worklog
-{
-  "date": "2025-01-20",
-  "hours": 2.5,
-  "note": "Revisión de endpoints"
-}
+# Tests con cobertura
+npm run test:coverage
+```
 
-### Para editar worklog
-{
-  "hours": 3,
-  "note": "Ajuste tras pruebas"
-}
+### Testing Manual
 
-### Para respuesta de listado por tarjeta
-[
-  {
-    "id": 18,
-    "card_id": 42,
-    "user_id": 7,
-    "date": "2025-01-20",
-    "hours": 2.5,
-    "note": "Revisión de endpoints",
-    "created_at": "2025-01-20T10:15:00",
-    "updated_at": "2025-01-20T10:15:00"
-  }
-]
+Pruebas manuales realizadas con:
+- Thunder Client / Postman
+- Swagger UI integrado
+- Navegador (frontend)
 
-### Para respuesta semanal (usuario actual)
-{
-  "week": "2025-04",
-  "total_week_hours": 12.5,
-  "daily_totals": {
-    "2025-01-20": 4.0,
-    "2025-01-21": 3.5,
-    "2025-01-22": 5.0
-  },
-  "worklogs": [...]
-}
+**Casos probados:**
+- ✅ Registro y login de usuarios
+- ✅ CRUD completo de tableros, listas y tarjetas
+- ✅ Registro y consulta de worklogs
+- ✅ Generación de reportes semanales
+- ✅ Validaciones de seguridad y ownership
+- ✅ Manejo de errores y casos edge
 
 ---
 
-## Sistema de Reportes
+## 🚢 Despliegue
 
-### Endpoints de reportes semanales
+### Producción
 
-Los reportes permiten obtener estadísticas agregadas de un tablero para una semana específica.
+Ver **[Guía de Despliegue](docs/DEPLOYMENT.md)** para instrucciones detalladas.
 
-#### 1. Resumen semanal de tarjetas
-```
-GET /report/{board_id}/summary?week=YYYY-WW
-```
+#### Checklist Pre-Despliegue
 
-**Descripción:** Retorna un resumen de tarjetas completadas, vencidas y nuevas en la semana.
+- [ ] Cambiar `SECRET_KEY` a valor aleatorio fuerte
+- [ ] Configurar `DATABASE_URL` con credenciales de producción
+- [ ] Actualizar `CORS_ORIGINS` con dominios permitidos
+- [ ] Establecer `ENVIRONMENT=production`
+- [ ] Incrementar `BCRYPT_ROUNDS` a 14-16
+- [ ] Configurar HTTPS obligatorio
+- [ ] Implementar rate limiting robusto
+- [ ] Configurar backups automáticos de BD
+- [ ] Setup de monitoreo (logs, métricas)
+- [ ] Ejecutar tests completos
 
-**Parámetros:**
-- `board_id` (path): ID del tablero
-- `week` (query, opcional): Semana en formato ISO (YYYY-WW). Por defecto: semana actual
+#### Build de Producción
 
-**Autenticación:** JWT requerido (usuario debe ser dueño del tablero)
+```bash
+# Backend
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --workers 4
 
-**Respuesta:**
-```json
-{
-  "week": "2026-02",
-  "completed": 2,
-  "overdue": 1,
-  "new": 0
-}
-```
-
-#### 2. Horas por usuario
-```
-GET /report/{board_id}/hours-by-user?week=YYYY-WW
+# Frontend
+cd frontend
+npm run build
+# Los archivos están en frontend/dist/
 ```
 
-**Descripción:** Retorna las horas trabajadas por cada usuario en el tablero durante la semana.
+#### Opciones de Hosting
 
-**Parámetros:**
-- `board_id` (path): ID del tablero
-- `week` (query, opcional): Semana en formato ISO (YYYY-WW)
+- **Backend:** Render, Railway, Fly.io, AWS, GCP, Azure
+- **Frontend:** Vercel, Netlify, Cloudflare Pages
+- **Base de datos:** Render PostgreSQL, Supabase, AWS RDS
 
-**Autenticación:** JWT requerido
+---
 
-**Respuesta:**
-```json
-{
-  "week": "2026-02",
-  "users": [
-    {
-      "user_id": 1,
-      "username": "testuser",
-      "total_hours": 10.0,
-      "tasks_count": 3
-    }
-  ]
-}
+## 📊 Modelo de Datos
+
+```sql
+-- Usuarios
+users
+├── id (PK)
+├── username
+├── email (unique)
+└── password_hash
+
+-- Tableros
+boards
+├── id (PK)
+├── title
+└── user_id (FK -> users.id)
+
+-- Listas/Columnas
+lists
+├── id (PK)
+├── title
+└── board_id (FK -> boards.id)
+
+-- Tarjetas
+cards
+├── id (PK)
+├── title
+├── list_id (FK -> lists.id)
+├── status (todo|in_progress|done)
+└── order
+
+-- Registro de horas
+worklogs
+├── id (PK)
+├── card_id (FK -> cards.id)
+├── user_id (FK -> users.id)
+├── date
+├── hours
+├── note
+├── created_at
+└── updated_at
 ```
 
-#### 3. Horas por tarjeta
+---
+
+## 🔒 Seguridad
+
+### Medidas Implementadas
+
+1. **Autenticación robusta**
+   - JWT con expiración configurable
+   - Refresh tokens para renovación segura
+   - Bcrypt para hashing (12 rounds mínimo)
+
+2. **Autorización**
+   - Validación de ownership en todos los recursos
+   - Prevención de IDOR
+   - Control de acceso basado en usuario
+
+3. **Protecciones adicionales**
+   - CORS configurado
+   - Rate limiting básico
+   - Validaciones con Pydantic
+   - Logging de eventos de seguridad
+   - Headers de seguridad en responses
+
+### Recomendaciones para Producción
+
+- ✅ Usar HTTPS exclusivamente
+- ✅ Implementar WAF (Web Application Firewall)
+- ✅ Rate limiting con Redis
+- ✅ Monitoreo de intentos de autenticación
+- ✅ Auditoría de accesos
+- ✅ Backups encriptados
+- ✅ Secrets management (Vault, AWS Secrets Manager)
+
+---
+
+## 📝 Logging y Auditoría
+
+Los logs se almacenan en `logs/app_YYYYMMDD.log` e incluyen:
+
+- ✅ Intentos de login (exitosos y fallidos)
+- ✅ Registro de nuevos usuarios
+- ✅ Acceso a recursos protegidos
+- ✅ Errores y excepciones
+- ✅ Tiempo de procesamiento de requests
+- ✅ Cambios en datos sensibles
+
+### Formato de Logs
+
 ```
-GET /report/{board_id}/hours-by-card?week=YYYY-WW
+2026-01-13 16:45:23 - INFO - POST /auth/login - Status: 200 - Time: 0.234s
+2026-01-13 16:45:30 - INFO - GET /boards/ - Status: 200 - Time: 0.087s
+2026-01-13 16:46:12 - WARNING - Failed login attempt for user: john@example.com
 ```
 
-**Descripción:** Retorna las horas trabajadas en cada tarjeta del tablero durante la semana.
+---
 
-**Parámetros:**
-- `board_id` (path): ID del tablero
-- `week` (query, opcional): Semana en formato ISO (YYYY-WW)
+## 🐛 Troubleshooting
 
-**Autenticación:** JWT requerido
+### Problemas Comunes
 
-**Respuesta:**
-```json
-{
-  "week": "2026-02",
-  "cards": [
-    {
-      "card_id": 1,
-      "title": "Card 1",
-      "total_hours": 4.5,
-      "responsible": null,
-      "estado": "todo"
-    },
-    {
-      "card_id": 2,
-      "title": "Card 2",
-      "total_hours": 3.0,
-      "responsible": null,
-      "estado": "done"
-    }
-  ]
-}
+**Backend no inicia:**
+```bash
+# Verificar variables de entorno
+cat .env
+
+# Verificar conexión a PostgreSQL
+psql -U postgres -d neocare
+
+# Ver logs
+tail -f logs/app_*.log
 ```
 
-### Validaciones de reportes
+**Frontend no conecta con backend:**
+```bash
+# Verificar CORS en backend
+grep CORS_ORIGINS .env
 
-- Formato de semana debe ser YYYY-WW (ISO 8601)
-- Usuario debe ser dueño del tablero
-- JWT obligatorio
-- Si no se especifica semana, se usa la semana actual (lunes-domingo)
-- Retorna arrays vacíos si no hay datos
+# Verificar URL de API en frontend
+grep VITE_API_URL frontend/.env
+```
 
-### Optimizaciones
+**Errores de migración:**
+```bash
+# Ver estado de migraciones
+cd backend
+alembic current
 
-Los endpoints de reportes utilizan consultas SQL optimizadas con:
-- Agregaciones GROUP BY
-- SUM y COUNT para cálculos
-- Joins eficientes entre worklogs, cards, lists y boards
-- Filtrado por rango de fechas (lunes-domingo)
+# Revertir y volver a aplicar
+alembic downgrade -1
+alembic upgrade head
+```
+
+---
+
+## 📄 Licencia
+
+Propiedad de **NeoCare Health**. Todos los derechos reservados.
+
+Este es un proyecto privado desarrollado para uso interno del departamento de Innovación.
+
+---
+
+## 👥 Equipo de Desarrollo
+
+**Desarrollado durante el programa de prácticas profesionales**
+
+- **Documentación y DevOps:** Pablo Techera
+- **Backend:** Equipo de desarrollo
+- **Frontend:** Equipo de desarrollo
+- **Testing:** Equipo QA
+
+---
+
+## 📞 Soporte
+
+Para problemas técnicos o preguntas:
+
+1. **Revisar logs:** `logs/app_YYYYMMDD.log`
+2. **Consultar documentación:** Carpeta `docs/`
+3. **Contactar:** Equipo de Innovación NeoCare Health
+
+---
+
+## 🎯 Roadmap Futuro
+
+- [ ] Sistema de notificaciones en tiempo real
+- [ ] Etiquetas y filtros avanzados
+- [ ] Comentarios en tarjetas
+- [ ] Adjuntos de archivos
+- [ ] Integración con calendario
+- [ ] Exportación de reportes en PDF
+- [ ] Dashboard de métricas avanzadas
+- [ ] Modo offline con sincronización
+- [ ] App móvil (React Native)
+
+---
+
+<div align="center">
+
+**⭐ NeoCare - Gestión de Proyectos Inteligente ⭐**
+
+*Desarrollado con ❤️ por el equipo de Innovación de NeoCare Health*
+
+</div>
