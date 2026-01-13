@@ -17,14 +17,27 @@ const Login = () => {
     setError('');
     setIsLoading(true);
 
+    console.log('[LOGIN] Iniciando proceso de login');
+    console.log('[LOGIN] Email:', email);
+
     try {
+      console.log('[LOGIN] Llamando a función login...');
       const response = await login({ email, password });
+      console.log('[LOGIN] Login exitoso, respuesta:', response);
+      console.log('[LOGIN] Guardando token en localStorage...');
       setToken(response.access_token);
+      console.log('[LOGIN] Navegando a dashboard...');
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Error al iniciar sesión');
+      console.error('[LOGIN] Error capturado:', err);
+      console.error('[LOGIN] Error response:', err.response);
+      console.error('[LOGIN] Error data:', err.response?.data);
+      const errorMsg = err.response?.data?.detail || 'Error al iniciar sesión';
+      console.error('[LOGIN] Mensaje de error:', errorMsg);
+      setError(errorMsg);
     } finally {
       setIsLoading(false);
+      console.log('[LOGIN] Proceso de login terminado');
     }
   };
 

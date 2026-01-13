@@ -39,14 +39,32 @@ const DEMO_USER = {
 };
 
 export const login = async (data: LoginRequest): Promise<AuthResponse> => {
+  console.log('[AUTH] Iniciando login con:', { email: data.email, useMock: USE_MOCK });
+  
   if (USE_MOCK) {
+    console.log('[AUTH] Modo MOCK activo');
     if (data.email === DEMO_USER.email && data.password === DEMO_USER.password) {
       return Promise.resolve({ access_token: 'mock-token-12345', token_type: 'bearer' });
     }
     throw { response: { data: { detail: 'Credenciales inválidas' } } };
   }
-  const response = await api.post<AuthResponse>('/auth/login', data);
-  return response.data;
+  
+  console.log('[AUTH] Haciendo petición al backend: POST /auth/login');
+  try {
+    const response = await api.post<AuthResponse>('/auth/login', data);
+    console.log('[AUTH] Respuesta exitosa:', { 
+      status: response.status, 
+      hasToken: !!response.data.access_token 
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error('[AUTH] Error en login:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message
+    });
+    throw error;
+  }
 };
 
 export const register = async (data: RegisterRequest): Promise<RegisterResponse> => {
