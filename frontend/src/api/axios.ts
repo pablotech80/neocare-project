@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://web-production-4b1d2.up.railway.app';
+// IMPORTANTE: Forzar HTTPS para evitar Mixed Content errors
+const API_URL = 'https://web-production-4b1d2.up.railway.app';
 
 console.log('[AXIOS] Configurando cliente con baseURL:', API_URL);
 
