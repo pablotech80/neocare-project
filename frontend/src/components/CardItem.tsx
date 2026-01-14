@@ -44,37 +44,29 @@ const CardItem = ({ card, onClick, isDragging = false }: CardItemProps) => {
       {...listeners}
       onClick={onClick}
       className={`
-        bg-white rounded-lg border border-gray-200 p-3 cursor-pointer dnd-transition
-        ${isDragging || isSorting ? 'shadow-xl scale-[1.03] z-50' : 'shadow-sm hover:shadow-md hover:-translate-y-1'}
+        bg-white rounded-md border border-gray-200 p-3 cursor-pointer dnd-transition
+        ${isDragging || isSorting ? 'shadow-lg rotate-2 z-50' : 'hover:bg-gray-50'}
       `}
     >
-      <h4 className="font-medium text-gray-800 mb-2">{card.title}</h4>
+      <h4 className="font-normal text-sm text-gray-800 mb-2 leading-snug">{card.title}</h4>
 
       {card.assignee && (
         <div className="mb-2">
-          <span className="inline-flex flex-col bg-indigo-50 text-indigo-700 px-2 py-1 rounded-lg border border-indigo-200 text-xs">
-            <span className="flex items-center gap-2">
-              <span className="w-5 h-5 flex items-center justify-center rounded-full bg-indigo-600 text-white text-[10px] font-bold">
-                {assigneeInitials}
-              </span>
-              {card.assignee.name}
+          <div className="flex items-center gap-2">
+            <span className="w-6 h-6 flex items-center justify-center rounded-full bg-purple-600 text-white text-xs font-medium">
+              {assigneeInitials}
             </span>
-
-            {card.assignee.role && (
-              <span className="text-[10px] text-indigo-500 ml-7">
-                {card.assignee.role}
-              </span>
-            )}
-          </span>
+            <span className="text-xs text-gray-600">{card.assignee.name}</span>
+          </div>
         </div>
       )}
 
       {card.labels && card.labels.length > 0 && (
-        <div className="flex flex-wrap gap-1 mb-2">
+        <div className="flex flex-wrap gap-1.5 mb-2">
           {card.labels.map(label => (
             <span
               key={label.id}
-              className="text-xs px-2 py-0.5 rounded-full text-white transition-opacity duration-200 hover:opacity-90"
+              className="text-xs px-2 py-0.5 rounded text-white font-medium"
               style={{ backgroundColor: label.color }}
             >
               {label.name}
@@ -85,13 +77,13 @@ const CardItem = ({ card, onClick, isDragging = false }: CardItemProps) => {
 
       {total > 0 && (
         <div className="mb-2">
-          <div className="flex justify-between text-xs text-gray-600 mb-1">
-            <span>{completed}/{total} ✓</span>
+          <div className="flex justify-between text-xs text-gray-500 mb-1">
+            <span className="font-medium">{completed}/{total} tareas</span>
             <span>{progress}%</span>
           </div>
-          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-full h-1.5 bg-gray-200 rounded overflow-hidden">
             <div
-              className="h-full bg-indigo-500 transition-all duration-300"
+              className="h-full bg-purple-600 transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -99,8 +91,8 @@ const CardItem = ({ card, onClick, isDragging = false }: CardItemProps) => {
       )}
 
       {card.due_date && (
-        <div className="flex items-center gap-1 text-xs text-gray-500 mt-2">
-          <Calendar className="w-4 h-4" />
+        <div className="flex items-center gap-1.5 text-xs text-gray-500 mt-2">
+          <Calendar className="w-3.5 h-3.5" />
           <span>{card.due_date}</span>
         </div>
       )}

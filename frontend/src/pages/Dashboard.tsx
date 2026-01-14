@@ -52,121 +52,138 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-purple-100 relative overflow-hidden">
-      {/* Efectos de niebla */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-300/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-      </div>
-      
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-purple-100 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <LayoutDashboard className="w-8 h-8 text-purple-600" />
-            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">NeoCare</h1>
-          </div>
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar estilo Jira */}
+      <aside className="w-16 bg-gradient-to-b from-purple-700 to-purple-900 flex flex-col items-center py-6 gap-6 shadow-xl">
+        <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-md">
+          <LayoutDashboard className="w-6 h-6 text-purple-700" />
+        </div>
+        <button
+          onClick={() => navigate('/my-hours')}
+          className="w-10 h-10 flex items-center justify-center rounded-lg text-purple-200 hover:bg-purple-600 hover:text-white transition"
+          title="Mis Horas"
+        >
+          <Clock className="w-5 h-5" />
+        </button>
+        <button
+          onClick={logout}
+          className="w-10 h-10 flex items-center justify-center rounded-lg text-purple-200 hover:bg-red-600 hover:text-white transition mt-auto"
+          title="Salir"
+        >
+          <LogOut className="w-5 h-5" />
+        </button>
+      </aside>
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col">
+        {/* Top bar estilo Jira */}
+        <header className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-4">
-            <span className="text-gray-600">Hola, {user?.username || user?.email}</span>
-            <button
-              onClick={() => navigate('/my-hours')}
-              className="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition"
-            >
-              <Clock className="w-5 h-5" />
-              <span className="hidden sm:inline">Mis Horas</span>
-            </button>
-            <button
-              onClick={logout}
-              className="flex items-center gap-2 text-gray-500 hover:text-red-600 transition"
-            >
-              <LogOut className="w-5 h-5" />
-              <span className="hidden sm:inline">Salir</span>
-            </button>
+            <h1 className="text-xl font-semibold text-gray-800">Proyectos</h1>
           </div>
-        </div>
-      </header>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-600">{user?.username || user?.email}</span>
+          </div>
+        </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">Mis Tableros</h2>
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-violet-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-violet-700 transition shadow-lg"
-          >
-            <Plus className="w-5 h-5" />
-            Nuevo Tablero
-          </button>
-        </div>
-
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 text-purple-600 animate-spin" />
-          </div>
-        ) : boards.length === 0 ? (
-          <div className="text-center py-12">
-            <FolderKanban className="w-16 h-16 text-purple-300 mx-auto mb-4" />
-            <p className="text-gray-500">No tienes tableros aún</p>
-            <button
-              onClick={() => setShowModal(true)}
-              className="mt-4 text-purple-600 hover:underline font-medium"
-            >
-              Crear tu primer tablero
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {boards.map((board) => (
-              <div
-                key={board.id}
-                onClick={() => navigate(`/board/${board.id}`)}
-                className="bg-white/90 backdrop-blur-sm rounded-xl shadow-sm border border-purple-200 p-6 hover:shadow-lg hover:border-purple-300 transition cursor-pointer group"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-semibold text-gray-900 group-hover:text-purple-600 transition">
-                      {board.title}
-                    </h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Tablero #{board.id}
-                    </p>
-                  </div>
-                  <FolderKanban className="w-6 h-6 text-gray-400 group-hover:text-purple-500 transition" />
-                </div>
+        {/* Content area estilo Jira */}
+        <main className="flex-1 overflow-auto bg-gray-50 p-6">
+          <div className="max-w-7xl mx-auto">
+            {/* Header con botón */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-semibold text-gray-800">Tableros</h2>
+                <p className="text-sm text-gray-500 mt-1">Gestiona tus proyectos y tareas</p>
               </div>
-            ))}
-          </div>
-        )}
-      </main>
+              <button
+                onClick={() => setShowModal(true)}
+                className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2.5 rounded-md hover:bg-purple-700 transition shadow-sm font-medium text-sm"
+              >
+                <Plus className="w-4 h-4" />
+                Crear tablero
+              </button>
+            </div>
 
-      {/* Modal */}
+            {isLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="w-8 h-8 text-purple-600 animate-spin" />
+              </div>
+            ) : boards.length === 0 ? (
+              <div className="text-center py-20 bg-white rounded-lg border border-gray-200">
+                <FolderKanban className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-700 mb-2">No hay tableros</h3>
+                <p className="text-gray-500 mb-4">Crea tu primer tablero para comenzar</p>
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="text-purple-600 hover:text-purple-700 font-medium text-sm"
+                >
+                  + Crear tablero
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {boards.map((board) => (
+                  <div
+                    key={board.id}
+                    onClick={() => navigate(`/board/${board.id}`)}
+                    className="bg-white rounded-md border border-gray-200 p-5 hover:border-purple-400 hover:shadow-md transition cursor-pointer group"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded flex items-center justify-center flex-shrink-0">
+                        <FolderKanban className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-gray-800 group-hover:text-purple-600 transition truncate">
+                          {board.title}
+                        </h3>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Proyecto #{board.id}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+
+      {/* Modal estilo Jira */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl w-full max-w-md p-6 border border-purple-200">
-            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-4">
-              Crear Nuevo Tablero
-            </h3>
-            <form onSubmit={handleCreateBoard}>
-              <input
-                type="text"
-                value={newBoardTitle}
-                onChange={(e) => setNewBoardTitle(e.target.value)}
-                placeholder="Nombre del tablero"
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition mb-4"
-                autoFocus
-              />
-              <div className="flex gap-3 justify-end">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-md shadow-2xl w-full max-w-lg">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-800">
+                Crear nuevo tablero
+              </h3>
+            </div>
+            <form onSubmit={handleCreateBoard} className="p-6">
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nombre del tablero *
+                </label>
+                <input
+                  type="text"
+                  value={newBoardTitle}
+                  onChange={(e) => setNewBoardTitle(e.target.value)}
+                  placeholder="Ej: Proyecto Marketing 2026"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-sm"
+                  autoFocus
+                />
+              </div>
+              <div className="flex gap-3 justify-end pt-4">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition"
+                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md transition text-sm font-medium"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isCreating || !newBoardTitle.trim()}
-                  className="bg-gradient-to-r from-purple-600 to-violet-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-violet-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg"
+                  className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
                 >
                   {isCreating ? (
                     <>

@@ -289,43 +289,39 @@ const handleDragEnd = (event: any) => {
   // RENDER
   // ============================
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-purple-100 flex flex-col relative overflow-hidden">
-      {/* Efectos de niebla */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-300/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
-      </div>
-
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-purple-100 flex-shrink-0 relative z-10">
-        <div className="max-w-full mx-auto px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Top bar estilo Jira */}
+      <header className="bg-white border-b border-gray-200 flex-shrink-0 shadow-sm">
+        <div className="px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate('/dashboard')}
-              className="text-gray-500 hover:text-purple-600 transition"
+              className="text-gray-500 hover:text-gray-700 transition"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-3">
-              <LayoutDashboard className="w-6 h-6 text-purple-600" />
-              <h1 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">Tablero #{boardId}</h1>
+              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded flex items-center justify-center">
+                <LayoutDashboard className="w-4 h-4 text-white" />
+              </div>
+              <h1 className="text-lg font-semibold text-gray-800">Tablero #{boardId}</h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <span className="text-gray-600 text-sm">Hola, {user?.username || user?.email}</span>
+          <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/my-hours')}
-              className="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition text-sm"
+              className="flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-md transition text-sm"
             >
-              <Clock className="w-5 h-5" />
+              <Clock className="w-4 h-4" />
               <span className="hidden sm:inline">Mis Horas</span>
             </button>
             <button
               onClick={logout}
-              className="flex items-center gap-2 text-gray-500 hover:text-red-600 transition"
+              className="flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-md transition text-sm"
             >
-              <LogOut className="w-5 h-5" />
+              <LogOut className="w-4 h-4" />
+              <span className="hidden sm:inline">Salir</span>
             </button>
           </div>
         </div>
@@ -342,35 +338,33 @@ const handleDragEnd = (event: any) => {
         </div>
       )}
 
-      {/* Búsqueda */}
-      <div className="px-6 pt-4 flex items-center gap-2">
-        <div className="relative w-full max-w-md">
-          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Buscar tarjetas..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-200 focus:border-purple-500 outline-none transition"
-          />
-        </div>
-      </div>
+      {/* Búsqueda y filtros estilo Jira */}
+      <div className="px-6 py-4 bg-white border-b border-gray-200">
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="relative flex-1 min-w-[200px] max-w-md">
+            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Buscar tarjetas..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-200 focus:border-purple-500 outline-none transition text-sm"
+            />
+          </div>
+          
+          {/* Filtros */}
+          <div className="flex items-center gap-2 flex-wrap">
 
-      {/* Filtros */}
-      <div className="px-6 pt-4 flex items-center gap-4 flex-wrap">
-
-        {/* Filtro etiquetas */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <button
-            onClick={() => setSelectedLabel(null)}
-            className={`px-3 py-1 rounded-full text-sm border ${
-              selectedLabel === null
-                ? 'bg-gradient-to-r from-purple-600 to-violet-600 text-white'
-                : 'bg-white text-gray-700'
-            }`}
-          >
-            Todas
-          </button>
+            <button
+              onClick={() => setSelectedLabel(null)}
+              className={`px-3 py-1.5 rounded-md text-xs font-medium border transition ${
+                selectedLabel === null
+                  ? 'bg-purple-600 text-white border-purple-600'
+                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              Todas
+            </button>
 
           {allLabels.map(label => (
             <button
@@ -425,35 +419,31 @@ const handleDragEnd = (event: any) => {
                 <div
                   key={list.id}
                   className="
-                    bg-white shadow-md border border-gray-200 rounded-xl w-80 flex-shrink-0 flex flex-col 
+                    bg-gray-100 rounded-md w-72 flex-shrink-0 flex flex-col 
                     max-h-[calc(100vh-180px)]
-                    transform transition-all duration-300
-                    hover:shadow-lg hover:-translate-y-1
-                    animate-fade-slide
                   "
-                  style={{ animationDelay: `${index * 80}ms` }}
                 >
 
-                  {/* List header */}
-                  <div className="p-4 bg-gradient-to-r from-purple-50 to-violet-50 border-b border-purple-200 flex items-center justify-between rounded-t-xl">
+                  {/* List header estilo Jira */}
+                  <div className="p-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-gray-800">{list.title}</h3>
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
+                      <h3 className="font-semibold text-sm text-gray-700 uppercase tracking-wide">{list.title}</h3>
+                      <span className="text-xs text-gray-500">
                         {visibleCards.length}
                       </span>
                     </div>
 
                     <button
                       onClick={() => handleOpenNewCard(list.id)}
-                      className="p-1.5 rounded-full hover:bg-purple-100 text-purple-600 transition"
+                      className="p-1 rounded hover:bg-gray-200 text-gray-600 transition"
                       title="Añadir tarjeta"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
                   </div>
 
-                  {/* Cards area */}
-                  <DroppableCardsArea id={String(list.id)}>
+                  {/* Cards area estilo Jira - padding reducido */}
+                  <div className="flex-1 overflow-y-auto px-2 pb-2 space-y-2">
                     <SortableContext id={String(list.id)} items={itemIds}>
                       {visibleCards.map((card) => (
                         <div key={card.id} className="relative group">
@@ -470,7 +460,7 @@ const handleDragEnd = (event: any) => {
                         </div>
                       ))}
                     </SortableContext>
-                  </DroppableCardsArea>
+                  </div>
 
                 </div>
               );
@@ -499,23 +489,23 @@ const handleDragEnd = (event: any) => {
                       setIsCreatingList(false);
                     }
                   }}
-                  className="bg-white shadow-md border border-gray-200 rounded-xl p-4"
+                  className="bg-gray-100 rounded-md p-3 w-72 flex-shrink-0"
                 >
                   <input
                     type="text"
                     value={newListTitle}
                     onChange={(e) => setNewListTitle(e.target.value)}
                     placeholder="Nombre de la lista"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-200 focus:border-purple-500 outline-none transition mb-2"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-200 focus:border-purple-500 outline-none transition mb-2 text-sm bg-white"
                     autoFocus
                   />
                   <div className="flex gap-2">
                     <button
                       type="submit"
                       disabled={isCreatingList || !newListTitle.trim()}
-                      className="flex-1 bg-gradient-to-r from-purple-600 to-violet-600 text-white py-2 rounded-lg hover:from-purple-700 hover:to-violet-700 transition disabled:opacity-50 text-sm shadow-md"
+                      className="flex-1 bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition disabled:opacity-50 text-xs font-medium"
                     >
-                      {isCreatingList ? 'Creando...' : 'Crear lista'}
+                      {isCreatingList ? 'Creando...' : 'Agregar'}
                     </button>
                     <button
                       type="button"
@@ -523,7 +513,7 @@ const handleDragEnd = (event: any) => {
                         setShowNewListForm(false);
                         setNewListTitle('');
                       }}
-                      className="px-3 py-2 text-gray-600 hover:text-gray-800 transition"
+                      className="px-3 py-2 text-gray-600 hover:bg-gray-200 rounded-md transition text-xs"
                     >
                       ✕
                     </button>
