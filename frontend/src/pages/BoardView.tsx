@@ -1,4 +1,4 @@
-import { useState, useEffect, type ReactNode } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -23,24 +23,10 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragOverlay,
-  useDroppable
+  DragOverlay
 } from '@dnd-kit/core';
 
 import { SortableContext } from '@dnd-kit/sortable';
-
-
-// ============================
-// DROPPABLE AREA
-// ============================
-const DroppableCardsArea = ({ id, children }: { id: string; children: ReactNode }) => {
-  const { setNodeRef } = useDroppable({ id });
-  return (
-    <div ref={setNodeRef} className="flex-1 overflow-y-auto px-4 pb-4 space-y-3">
-      {children}
-    </div>
-  );
-};
 
 
 // ============================
@@ -49,7 +35,7 @@ const DroppableCardsArea = ({ id, children }: { id: string; children: ReactNode 
 const BoardView = () => {
   const { boardId } = useParams<{ boardId: string }>();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
 
   const [lists, setLists] = useState<List[]>([]);
   const [cards, setCards] = useState<Card[]>([]);
@@ -83,7 +69,7 @@ const BoardView = () => {
   // Cargar datos + asignar order
   // ============================
   useEffect(() => {
-    if (numericBoardId) fetchData();
+    if (numericBoardId) void fetchData();
   }, [numericBoardId]);
 
   const fetchData = async () => {
@@ -366,131 +352,127 @@ const handleDragEnd = (event: any) => {
               Todas
             </button>
 
-          {allLabels.map(label => (
-            <button
-              key={label.id}
-              onClick={() => setSelectedLabel(label.id)}
-              className="px-3 py-1 rounded-full text-sm border flex items-center gap-2"
-              style={{
-                backgroundColor: selectedLabel === label.id ? label.color : 'white',
-                color: selectedLabel === label.id ? 'white' : label.color,
-                borderColor: label.color,
-              }}
-            >
-              {label.name}
-            </button>
-          ))}
-        </div>
-
-        {/* Filtro por responsable */}
-        <div>
-          <select
-            value={selectedAssignee || ''}
-            onChange={(e) => setSelectedAssignee(e.target.value || null)}
-            className="px-3 py-1 border border-gray-300 rounded-lg text-sm bg-white"
-          >
-            <option value="">Todos los responsables</option>
-            {mockAssignees.map(a => (
-              <option key={a.id} value={a.id}>
-                {a.name}
-              </option>
+            {allLabels.map(label => (
+              <button
+                key={label.id}
+                onClick={() => setSelectedLabel(label.id)}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium border transition ${
+                  selectedLabel === label.id
+                    ? 'text-white'
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                }`}
+                style={{
+                  backgroundColor: selectedLabel === label.id ? label.color : undefined,
+                  borderColor: selectedLabel === label.id ? label.color : undefined
+                }}
+              >
+                {label.name}
+              </button>
             ))}
-          </select>
-        </div>
 
+            {/* Filtro por responsable */}
+            <select
+              value={selectedAssignee || ''}
+              onChange={(e) => setSelectedAssignee(e.target.value || null)}
+              className="px-3 py-1.5 border border-gray-300 rounded-md text-xs bg-white"
+            >
+              <option value="">Todos los responsables</option>
+              {mockAssignees.map(a => (
+                <option key={a.id} value={a.id}>
+                  {a.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
-      {/* Board content */}
-      <main className="flex-1 overflow-x-auto p-6">
+      {/* Board content estilo Jira */}
+      <div className="flex-1 overflow-x-auto p-6 flex gap-4 bg-gradient-to-br from-gray-50 to-gray-100">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
-          <div className="flex gap-6 h-full">
 
-            {lists.map((list, index) => {
-              const allCardsInList = cards.filter(c => c.list_id === list.id);
-              const itemIds = allCardsInList.map(c => String(c.id));
-              const visibleCards = getCardsForList(list.id);
+          {lists.map((list) => {
+            const allCardsInList = cards.filter(c => c.list_id === list.id);
+            const itemIds = allCardsInList.map(c => String(c.id));
+            const visibleCards = getCardsForList(list.id);
 
-              return (
-                <div
-                  key={list.id}
-                  className="
-                    bg-gray-100 rounded-md w-72 flex-shrink-0 flex flex-col 
-                    max-h-[calc(100vh-180px)]
-                  "
-                >
+            return (
+              <div
+                key={list.id}
+                className="bg-gray-100 rounded-md w-72 shrink-0 flex flex-col max-h-[calc(100vh-180px)]"
+              >
 
-                  {/* List header estilo Jira */}
-                  <div className="p-3 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-sm text-gray-700 uppercase tracking-wide">{list.title}</h3>
-                      <span className="text-xs text-gray-500">
-                        {visibleCards.length}
-                      </span>
-                    </div>
-
-                    <button
-                      onClick={() => handleOpenNewCard(list.id)}
-                      className="p-1 rounded hover:bg-gray-200 text-gray-600 transition"
-                      title="Añadir tarjeta"
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
+                {/* List header estilo Jira */}
+                <div className="p-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold text-sm text-gray-700 uppercase tracking-wide">{list.title}</h3>
+                    <span className="text-xs text-gray-500">
+                      {visibleCards.length}
+                    </span>
                   </div>
 
-                  {/* Cards area estilo Jira - padding reducido */}
-                  <div className="flex-1 overflow-y-auto px-2 pb-2 space-y-2">
-                    <SortableContext id={String(list.id)} items={itemIds}>
-                      {visibleCards.map((card) => (
-                        <div key={card.id} className="relative group">
-                          <CardItem card={card} onClick={() => handleOpenEditCard(card)} />
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteCard(card.id);
-                            }}
-                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 p-1 bg-white rounded shadow hover:bg-red-50 transition"
-                          >
-                            <Trash2 className="w-4 h-4 text-red-500" />
-                          </button>
-                        </div>
-                      ))}
-                    </SortableContext>
-                  </div>
-
+                  <button
+                    onClick={() => handleOpenNewCard(list.id)}
+                    className="p-1 rounded hover:bg-gray-200 text-gray-600 transition"
+                    title="Añadir tarjeta"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
                 </div>
-              );
-            })}
-            {/* Add new list */}
-            <div className="w-80 flex-shrink-0">
-              {showNewListForm ? (
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    if (!newListTitle.trim()) return;
 
-                    try {
-                      setIsCreatingList(true);
-                      const newList = await createList({
-                        title: newListTitle,
-                        board_id: numericBoardId
-                      });
+                {/* Cards area estilo Jira */}
+                <div className="flex-1 overflow-y-auto px-2 pb-2 space-y-2">
+                  <SortableContext id={String(list.id)} items={itemIds}>
+                    {visibleCards.map((card) => (
+                      <div key={card.id} className="relative group">
+                        <CardItem card={card} onClick={() => handleOpenEditCard(card)} />
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            void handleDeleteCard(card.id);
+                          }}
+                          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 p-1 bg-white rounded shadow hover:bg-red-50 transition"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </button>
+                      </div>
+                    ))}
+                  </SortableContext>
+                </div>
+              </div>
+            );
+          })}
+          {/* Add new list */}
+          <div className="w-72 shrink-0">
+            {showNewListForm ? (
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  if (!newListTitle.trim()) return;
 
-                      setLists(prev => [...prev, newList]);
-                      setNewListTitle('');
-                      setShowNewListForm(false);
-                    } catch (err: any) {
-                      setError(err.response?.data?.detail || 'Error al crear la lista');
-                    } finally {
-                      setIsCreatingList(false);
-                    }
-                  }}
-                  className="bg-gray-100 rounded-md p-3 w-72 flex-shrink-0"
-                >
+                  try {
+                    setIsCreatingList(true);
+                    const newList = await createList({
+                      title: newListTitle,
+                      board_id: numericBoardId
+                    });
+
+                    setLists(prev => [...prev, newList]);
+                    setNewListTitle('');
+                    setShowNewListForm(false);
+                  } catch (err: any) {
+                    setError(err.response?.data?.detail || 'Error al crear la lista');
+                  } finally {
+                    setIsCreatingList(false);
+                  }
+                }}
+                className="bg-gray-100 rounded-md p-3 w-full"
+              >
                   <input
                     type="text"
                     value={newListTitle}
