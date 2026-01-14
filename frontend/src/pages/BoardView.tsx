@@ -277,9 +277,9 @@ const handleDragEnd = (event: any) => {
   // ============================
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-purple-100 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3 text-gray-600">
-          <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
           <span>Cargando tablero...</span>
         </div>
       </div>
@@ -289,21 +289,26 @@ const handleDragEnd = (event: any) => {
   // RENDER
   // ============================
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-violet-50 to-purple-100 flex flex-col relative overflow-hidden">
+      {/* Efectos de niebla */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-violet-300/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+      </div>
 
       {/* Header */}
-      <header className="bg-white shadow-sm border-b flex-shrink-0">
+      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-purple-100 flex-shrink-0 relative z-10">
         <div className="max-w-full mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate('/dashboard')}
-              className="text-gray-500 hover:text-gray-700 transition"
+              className="text-gray-500 hover:text-purple-600 transition"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-3">
-              <LayoutDashboard className="w-6 h-6 text-indigo-600" />
-              <h1 className="text-lg font-bold text-gray-900">Tablero #{boardId}</h1>
+              <LayoutDashboard className="w-6 h-6 text-purple-600" />
+              <h1 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">Tablero #{boardId}</h1>
             </div>
           </div>
 
@@ -311,7 +316,7 @@ const handleDragEnd = (event: any) => {
             <span className="text-gray-600 text-sm">Hola, {user?.username || user?.email}</span>
             <button
               onClick={() => navigate('/my-hours')}
-              className="flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition text-sm"
+              className="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition text-sm"
             >
               <Clock className="w-5 h-5" />
               <span className="hidden sm:inline">Mis Horas</span>
@@ -346,7 +351,7 @@ const handleDragEnd = (event: any) => {
             placeholder="Buscar tarjetas..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition"
+            className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-200 focus:border-purple-500 outline-none transition"
           />
         </div>
       </div>
@@ -360,7 +365,7 @@ const handleDragEnd = (event: any) => {
             onClick={() => setSelectedLabel(null)}
             className={`px-3 py-1 rounded-full text-sm border ${
               selectedLabel === null
-                ? 'bg-indigo-600 text-white'
+                ? 'bg-gradient-to-r from-purple-600 to-violet-600 text-white'
                 : 'bg-white text-gray-700'
             }`}
           >
@@ -430,17 +435,17 @@ const handleDragEnd = (event: any) => {
                 >
 
                   {/* List header */}
-                  <div className="p-4 bg-gray-100 border-b border-gray-200 flex items-center justify-between rounded-t-xl">
+                  <div className="p-4 bg-gradient-to-r from-purple-50 to-violet-50 border-b border-purple-200 flex items-center justify-between rounded-t-xl">
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-gray-800">{list.title}</h3>
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
                         {visibleCards.length}
                       </span>
                     </div>
 
                     <button
                       onClick={() => handleOpenNewCard(list.id)}
-                      className="p-1.5 rounded-full hover:bg-indigo-100 text-indigo-600 transition"
+                      className="p-1.5 rounded-full hover:bg-purple-100 text-purple-600 transition"
                       title="Añadir tarjeta"
                     >
                       <Plus className="w-4 h-4" />
@@ -501,14 +506,14 @@ const handleDragEnd = (event: any) => {
                     value={newListTitle}
                     onChange={(e) => setNewListTitle(e.target.value)}
                     placeholder="Nombre de la lista"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition mb-2"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-200 focus:border-purple-500 outline-none transition mb-2"
                     autoFocus
                   />
                   <div className="flex gap-2">
                     <button
                       type="submit"
                       disabled={isCreatingList || !newListTitle.trim()}
-                      className="flex-1 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 text-sm"
+                      className="flex-1 bg-gradient-to-r from-purple-600 to-violet-600 text-white py-2 rounded-lg hover:from-purple-700 hover:to-violet-700 transition disabled:opacity-50 text-sm shadow-md"
                     >
                       {isCreatingList ? 'Creando...' : 'Crear lista'}
                     </button>
